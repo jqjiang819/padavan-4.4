@@ -1,0 +1,11 @@
+--- a/osdep/OSUtils.cpp	2022-06-28 05:13:57.000000000 +0800
++++ b/osdep/OSUtils.cpp	2022-10-31 14:18:25.549673365 +0800
+@@ -417,7 +417,7 @@
+ 	return std::string("/var/db/zerotier-one");
+ #else
+ 	// Use /var/lib for Linux and other *nix
+-	return std::string("/var/lib/zerotier-one");
++	return std::string("/etc/storage/zerotier-one");
+ #endif
+ 
+ #endif

@@ -14,6 +14,7 @@ extract_test:
 		patch -d $(SRC_NAME) -p1 -i ../0006-gcc10.patch ; \
 		patch -d $(SRC_NAME) -p1 -i ../0007-add-cerrno-header-for-str-errno.patch ; \
 		patch -d $(SRC_NAME) -p1 -i ../0008-fix-compilation-for-arm_cortex-a7-neon.patch; \
+		patch -d $(SRC_NAME) -p1 -i ../0009-fix-conf-path.patch ; \
 	 fi ;
 
 config_test:
