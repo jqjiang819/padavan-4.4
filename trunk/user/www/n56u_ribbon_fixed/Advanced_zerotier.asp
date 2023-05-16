@@ -59,7 +59,7 @@ showMRULESList();
 function showmenu(){
 showhide_div('allink', found_app_aliddns());
 showhide_div('ddlink', found_app_ddnsto());
-showhide_div('wilink', 1);
+showhide_div('wilink', found_app_wireguard());
 }
 
 function applyRule(){
@@ -220,38 +220,14 @@ function showMRULESList(){
                         </div>
 								<div class="row-fluid">
 									<div id="tabMenu" class="submenuBlock"></div>
-									<div class="alert alert-info" style="margin: 10px;">
-									<p>Zerotier是一个开源，跨平台，而且适合内网穿透互联的傻瓜配置虚拟 VPN LAN<br>
-									</p>
-									</div>
+									<div class="alert alert-info" style="margin: 10px;">Zerotier是一个免费、开源且跨平台的内网穿透工具</div>
 
 									<table width="100%" align="center" cellpadding="4" cellspacing="0" class="table">
 									<tr> <th><#running_status#></th>
                                             <td id="zerotier_status" colspan="3"></td>
                                         </tr>
-										<tr><th>ZeroTier 客户端 ID</th>
-				<td>
-					<input type="text" class="input" name="zerotier_id" id="zerotier_id" style="width: 200px" value="<% nvram_get_x("","zerotier_id"); %>" />
-				</td>
-											</tr>
-											<tr>
-											<th width="30%" style="border-top: 0 none;">允许客户端NAT</th>
-											<td style="border-top: 0 none;">
-													<div class="main_itoggle">
-													<div id="zerotier_nat_on_of">
-														<input type="checkbox" id="zerotier_nat_fake" <% nvram_match_x("", "zerotier_nat", "1", "value=1 checked"); %><% nvram_match_x("", "zerotier_nat", "0", "value=0"); %>  />
-													</div>
-												</div>
-												<div style="position: absolute; margin-left: -10000px;">
-													<input type="radio" value="1" name="zerotier_nat" id="zerotier_nat_1" class="input" value="1" <% nvram_match_x("", "zerotier_nat", "1", "checked"); %> /><#checkbox_Yes#>
-													<input type="radio" value="0" name="zerotier_nat" id="zerotier_nat_0" class="input" value="0" <% nvram_match_x("", "zerotier_nat", "0", "checked"); %> /><#checkbox_No#>
-												</div>
-												 允许Zerotier的拨入客户端访问路由器LAN资源（需要在 Zerotier管理页面设定到LAN网段的路由表）
-											</td>
-
-										</tr>
-											<tr>
-											<th width="30%" style="border-top: 0 none;">启用ZeroTier客户端</th>
+										<tr>
+											<th width="30%" style="border-top: 0 none;">启用客户端</th>
 											<td style="border-top: 0 none;">
 													<div class="main_itoggle">
 													<div id="zerotier_enable_on_of">
@@ -265,16 +241,34 @@ function showMRULESList(){
 											</td>
 
 										</tr>
-										
+										<tr><th>Network ID</th>
+											<td>
+												<input type="text" class="input" name="zerotier_id" id="zerotier_id" style="width: 200px" value="<% nvram_get_x("","zerotier_id"); %>" />
+											</td>
+										</tr>
+										<tr><th>Moon ID</th>
+											<td>
+												<input type="text" class="input" name="zerotier_moonid" id="zerotier_moonid" style="width: 200px" value="<% nvram_get_x("","zerotier_moonid"); %>" />
+											</td>
+										</tr>
+										<tr>
+											<th width="30%" style="border-top: 0 none;">允许内网NAT</th>
+											<td style="border-top: 0 none;">
+													<div class="main_itoggle">
+													<div id="zerotier_nat_on_of">
+														<input type="checkbox" id="zerotier_nat_fake" <% nvram_match_x("", "zerotier_nat", "1", "value=1 checked"); %><% nvram_match_x("", "zerotier_nat", "0", "value=0"); %>  />
+													</div>
+												</div>
+												<div style="position: absolute; margin-left: -10000px;">
+													<input type="radio" value="1" name="zerotier_nat" id="zerotier_nat_1" class="input" value="1" <% nvram_match_x("", "zerotier_nat", "1", "checked"); %> /><#checkbox_Yes#>
+													<input type="radio" value="0" name="zerotier_nat" id="zerotier_nat_0" class="input" value="0" <% nvram_match_x("", "zerotier_nat", "0", "checked"); %> /><#checkbox_No#>
+												</div>
+												 允许Zerotier的拨入客户端访问路由器LAN资源（需要在 Zerotier管理页面设定到LAN网段的路由表）
+											</td>
 
-<tr><th>ZeroTier Moon Network ID</th>
-				<td>
-					<input type="text" class="input" name="zerotier_moonid" id="zerotier_moonid" style="width: 200px" value="<% nvram_get_x("","zerotier_moonid"); %>" />
-				</td>
-			</tr>			
-										
-<tr>
-											<th width="30%" style="border-top: 0 none;">启用ZeroTier Moon服务器</th>
+										</tr>			
+										<tr>
+											<th width="30%" style="border-top: 0 none;">启用Moon服务器</th>
 											<td style="border-top: 0 none;">
 													<div class="main_itoggle">
 													<div id="zerotiermoon_enable_on_of">
@@ -288,28 +282,27 @@ function showMRULESList(){
 											</td>
 
 										</tr>
-<tr><th>ZeroTier Moon服务器 IP or DomainName</th>
+<tr><th>Moon服务器地址</th>
 				<td>
 					<input type="text" class="input" name="zerotiermoon_ip" id="zerotiermoon_ip" style="width: 200px" value="<% nvram_get_x("","zerotiermoon_ip"); %>" />
-					<br>如果没有填写，将使用Wan获得的IP（请注意为公网IP）；如果填写IP地址，将使用该IP（请注意为公网IP）；如果填写域名，将使用域名获得IP（请注意为公网IP）。
+					<br>如果没有填写，将使用WAN获得的IP（请注意为公网IP）。
 				</td>
 			</tr>
-<tr><th>ZeroTier Moon服务器 ID</th>
+<tr><th>Moon服务器ID</th>
 				<td>
 					<input type="text" class="input" name="zerotiermoon_id" id="zerotiermoon_id" style="width: 200px" value="<% nvram_get_x("","zerotiermoon_id"); %>" readonly />
 					<br>服务器启用后自动生成Moon服务器的ID，在加入Moon时请使用客户端zerotier-cli orbit <该ID> <该ID>。
 				</td>
 			</tr>
 										<tr>
-											<th>zerotier官网</th>
+											<th>Zerotier管理平台</th>
 											<td>
-				<input type="button" class="btn btn-success" value="zerotier官网" onclick="window.open('https://my.zerotier.com/network')" size="0">
-				<br>点击跳转到Zerotier官网管理平台，新建或者管理网络，并允许客户端接入访问你私人网路（新接入的节点默认不允许访问）
+				<input type="button" class="btn btn-success" value="点击跳转" onclick="window.open('https://my.zerotier.com/network')" size="0">
 											</td>
 										</tr>
 									</table>
 <table width="100%" align="center" cellpadding="4" cellspacing="0" class="table">
-	<tr> <th colspan="4">需要访问其它zerotier的内网LAN网段,IP和网关和zerotier后台对应即可(本机的LAN网段不用填进去)</th></tr>
+	<tr> <th colspan="4">自定义路由</th></tr>
                                         <tr id="row_rules_caption">
 										 
                                             <th width="10%">
